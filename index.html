@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/flv.js@1.5.0/dist/flv.min.js"></script>
+</head>
+<body>
+  <div id="video-container">
+    <video id="my-video" controls width="640" height="360"></video>
+    <div id="quality-options"></div>
+  </div>
+
+  <script>
+    var videoElement = document.getElementById('my-video');
+    var flvPlayer = flvjs.createPlayer({
+      type: 'flv',
+      url: 'rtmp://play1nm.hnyongshun.cn/live/sd-1-3896288.flv',
+      isLive: false
+    });
+    var qualityOptions = [
+      {
+        name: 'Low Quality',
+        url: 'LOW_QUALITY_VIDEO_URL_HERE.flv'
+      },
+      {
+        name: 'Medium Quality',
+        url: 'MEDIUM_QUALITY_VIDEO_URL_HERE.flv'
+      },
+      {
+        name: 'High Quality',
+        url: 'HIGH_QUALITY_VIDEO_URL_HERE.flv'
+      }
+    ];
+
+    qualityOptions.forEach(function(option) {
+      var button = document.createElement('button');
+      button.innerText = option.name;
+      button.onclick = function() {
+        flvPlayer.unload();
+        flvPlayer.detachMediaElement();
+        videoElement.src = option.url;
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+        flvPlayer.play();
+      };
+      document.getElementById('quality-options').appendChild(button);
+    });
+
+    flvPlayer.attachMediaElement(videoElement);
+    flvPlayer.load();
+    flvPlayer.play();
+  </script>
+</body>
+</html>
