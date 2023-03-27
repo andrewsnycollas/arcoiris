@@ -1,53 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/flv.js@1.5.0/dist/flv.min.js"></script>
+  <meta charset="utf-8">
+  <title>FLV Player with Input Box</title>
+  <link href="//vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet">
+  <script src="//vjs.zencdn.net/7.11.4/video.min.js"></script>
 </head>
 <body>
-  <div id="video-container">
-    <video id="my-video" controls width="640" height="360"></video>
-    <div id="quality-options"></div>
+  <div>
+    <label for="flv-url">FLV URL:</label>
+    <input type="text" id="flv-url" placeholder="Enter the URL of the FLV file">
+    <button id="play-btn">Play</button>
   </div>
+  <br>
+  <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264"
+    data-setup='{}'>
+    <source id="video-source" src="" type="video/flv">
+  </video>
 
   <script>
-    var videoElement = document.getElementById('my-video');
-    var flvPlayer = flvjs.createPlayer({
-      type: 'flv',
-      url: 'https://livehdl2.ltjuq.top/ofmatch/HD1240191.flv',
-      isLive: false
-    });
-    var qualityOptions = [
-      {
-        name: 'Low Quality',
-        url: 'LOW_QUALITY_VIDEO_URL_HERE.flv'
-      },
-      {
-        name: 'Medium Quality',
-        url: 'MEDIUM_QUALITY_VIDEO_URL_HERE.flv'
-      },
-      {
-        name: 'High Quality',
-        url: 'HIGH_QUALITY_VIDEO_URL_HERE.flv'
+    var player = videojs('my-video');
+
+    var playBtn = document.getElementById('play-btn');
+    playBtn.addEventListener('click', function() {
+      var flvUrl = document.getElementById('flv-url').value;
+      if (flvUrl) {
+        var videoSource = document.getElementById('video-source');
+        videoSource.setAttribute('src', flvUrl);
+        player.src({
+          type: 'video/flv',
+          src: videoSource.src
+        });
+        player.play();
       }
-    ];
-
-    qualityOptions.forEach(function(option) {
-      var button = document.createElement('button');
-      button.innerText = option.name;
-      button.onclick = function() {
-        flvPlayer.unload();
-        flvPlayer.detachMediaElement();
-        videoElement.src = option.url;
-        flvPlayer.attachMediaElement(videoElement);
-        flvPlayer.load();
-        flvPlayer.play();
-      };
-      document.getElementById('quality-options').appendChild(button);
     });
-
-    flvPlayer.attachMediaElement(videoElement);
-    flvPlayer.load();
-    flvPlayer.play();
   </script>
 </body>
 </html>
